@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function AuthPage() {
   const [email, setEmail] = useState('');
@@ -53,7 +55,15 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-background">
+    <div className="relative flex items-center justify-center h-screen bg-background">
+      <div className="absolute top-4 left-4">
+        <Button asChild variant="ghost">
+          <Link href="/">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Chat
+          </Link>
+        </Button>
+      </div>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">{isRegistering ? 'Register' : 'Login'}</CardTitle>
