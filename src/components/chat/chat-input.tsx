@@ -59,7 +59,7 @@ export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) 
           )}
         />
         <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center">
-            <Button type="submit" size="icon" disabled={isLoading} className="neon-glow">
+            <Button type="submit" size="icon" disabled={isLoading} className="bg-tech-gradient animate-tech-gradient bg-[length:200%_auto] text-white">
                 <SendHorizontal className="h-5 w-5" />
                 <span className="sr-only">Send Message</span>
             </Button>
