@@ -103,4 +103,3 @@ export default function AuthPage() {
       </Card>
     </div>
   );
-}
