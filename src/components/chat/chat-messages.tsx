@@ -26,7 +26,7 @@ export default function ChatMessages({ messages, isLoading }: ChatMessagesProps)
       {messages.length === 0 && !isLoading && (
         <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
             <Bot className="h-12 w-12 mb-2 text-primary/50 neon-glow" />
-            <h2 className="text-xl font-headline font-semibold neon-text-gradient">AgentAI</h2>
+            <h2 className="text-xl font-headline font-semibold neon-text-gradient">Makers tech</h2>
             <p className="text-sm neon-text-gradient">Ask me anything!</p>
         </div>
       )}
