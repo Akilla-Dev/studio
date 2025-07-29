@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function AuthPage() {
   const [email, setEmail] = useState('');
@@ -17,12 +18,14 @@ export default function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setMessage(null);
+    setIsLoading(true);
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -34,12 +37,14 @@ export default function AuthPage() {
     } else {
       router.push('/admin');
     }
+    setIsLoading(false);
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setMessage(null);
+    setIsLoading(true);
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -52,7 +57,49 @@ export default function AuthPage() {
       setMessage('Please check your email to confirm your account!');
       setIsRegistering(false); // Switch back to login view after successful sign up
     }
+    setIsLoading(false);
   };
+  
+  const handleQuickAccess = async () => {
+    setError(null);
+    setMessage(null);
+    setIsLoading(true);
+
+    // Using a demo account for quick access
+    const { error } = await supabase.auth.signInWithPassword({
+      email: 'demo@example.com',
+      password: 'password', // Use a secure, known password for the demo account
+    });
+
+    if (error) {
+       // If the demo user doesn't exist, create it.
+      if (error.message.includes('Invalid login credentials')) {
+        const { error: signUpError } = await supabase.auth.signUp({
+          email: 'demo@example.com',
+          password: 'password',
+        });
+        if (signUpError) {
+          setError(`Could not create demo user: ${signUpError.message}`);
+        } else {
+           const { error: signInAgainError } = await supabase.auth.signInWithPassword({
+              email: 'demo@example.com',
+              password: 'password',
+           });
+            if (signInAgainError) {
+               setError(`Demo user created, but login failed: ${signInAgainError.message}`);
+            } else {
+               router.push('/admin');
+            }
+        }
+      } else {
+        setError(error.message);
+      }
+    } else {
+      router.push('/admin');
+    }
+    setIsLoading(false);
+  };
+
 
   return (
     <div className="relative flex items-center justify-center h-screen bg-background">
@@ -83,6 +130,7 @@ export default function AuthPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </div>
             <div className="space-y-2">
@@ -93,26 +141,31 @@ export default function AuthPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             {message && <p className="text-sm text-green-500">{message}</p>}
-            <Button type="submit" className="w-full">
-              {isRegistering ? 'Sign Up' : 'Login'}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading && isRegistering ? 'Signing up...' : isLoading ? 'Logging in...' : isRegistering ? 'Sign Up' : 'Login'}
             </Button>
           </form>
+           <Separator className="my-4" />
+            <Button variant="secondary" className="w-full" onClick={handleQuickAccess} disabled={isLoading}>
+                Acceso Rápido (Demo)
+            </Button>
           <div className="mt-4 text-center text-sm">
             {isRegistering ? (
               <>
                 Already have an account?{' '}
-                <Button variant="link" onClick={() => setIsRegistering(false)} className="p-0 h-auto align-baseline">
+                <Button variant="link" onClick={() => setIsRegistering(false)} className="p-0 h-auto align-baseline" disabled={isLoading}>
                   Login
                 </Button>
               </>
             ) : (
               <>
                 Don't have an account?{' '}
-                <Button variant="link" onClick={() => setIsRegistering(true)} className="p-0 h-auto align-baseline">
+                <Button variant="link" onClick={() => setIsRegistering(true)} className="p-0 h-auto align-baseline" disabled={isLoading}>
                   Sign Up
                 </Button>
               </>
