@@ -22,7 +22,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -91,22 +90,23 @@ export default function AdminPage() {
     };
   }, [inventory]);
 
-  useEffect(() => {
-    if (isDemo) {
-      setInventory(demoInventory);
-      setLoading(false);
-    } else {
-        const fetchUser = async () => {
-            const { data, error } = await supabase.auth.getUser();
-            if (error || !data.user) {
-              router.push('/login');
-            } else {
-              setUser(data.user);
-            }
-        };
-        fetchUser();
-    }
+    useEffect(() => {
+    const checkUser = async () => {
+      if (isDemo) {
+        setInventory(demoInventory);
+        setLoading(false);
+      } else {
+        const { data, error } = await supabase.auth.getUser();
+        if (error || !data.user) {
+          router.push('/login');
+        } else {
+          setUser(data.user);
+        }
+      }
+    };
+    checkUser();
   }, [router, isDemo]);
+
 
   const fetchInventory = async () => {
     setLoading(true);
@@ -129,10 +129,10 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && !isDemo) {
       fetchInventory();
     }
-  }, [user]);
+  }, [user, isDemo]);
 
   useEffect(() => {
     if (editingItem) {
@@ -198,7 +198,7 @@ export default function AdminPage() {
     }
   };
 
-  if (loading) {
+  if (loading && !isDemo) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
@@ -213,7 +213,7 @@ export default function AdminPage() {
         </Button>
       </div>
       <div className="flex justify-end items-center mb-6">
-        {!isDemo && <Button onClick={handleLogout}>Logout</Button>}
+        {!isDemo && user && <Button onClick={handleLogout}>Logout</Button>}
       </div>
       <div className="text-center mb-6">
         <h1 className="text-3xl font-bold">Admin Dashboard {isDemo && <span className="text-sm font-normal text-muted-foreground">(Demo)</span>}</h1>
