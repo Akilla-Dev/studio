@@ -5,7 +5,7 @@ import type { Message } from '@/lib/types';
 import type { SmartToolInvocationOutput } from '@/ai/flows/smart-tool-invocation';
 
 
-const WEBHOOK_URL = 'https://n8n-agentai-pqrsandmore-u43659.vm.elestio.app/webhook-test/input';
+const WEBHOOK_URL = 'https://n8n-agentai-pqrsandmore-u43659.vm.elestio.app/webhook/input';
 
 interface N8NResponse {
   reply?: string;

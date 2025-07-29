@@ -1,7 +1,5 @@
 import type { Message } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import ChatAvatar from './chat-avatar';
-import { Card, CardContent } from '../ui/card';
 
 interface ChatMessageProps {
   message: Message;
@@ -15,8 +13,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
 
   if (isSystem) {
     return (
-      <div className="flex items-center justify-center my-4">
-        <div className="text-xs text-muted-foreground max-w-2xl w-full">
+      <div className="flex items-center justify-center my-2">
+        <div className="text-xs text-muted-foreground max-w-2xl w-full px-2">
             {content}
         </div>
       </div>
@@ -25,20 +23,18 @@ export default function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <div
-      className={cn('flex items-start gap-3 my-4', isUser && 'justify-end')}
+      className={cn('flex my-2 text-sm', isUser ? 'justify-end' : 'justify-start')}
     >
-      {!isUser && <ChatAvatar role={role} />}
-      <Card
+      <div
         className={cn(
-          'max-w-xl rounded-2xl',
+          'p-3 rounded-lg max-w-xl',
           isUser
-            ? 'bg-primary text-primary-foreground rounded-br-none'
-            : 'bg-card text-card-foreground rounded-bl-none'
+            ? 'bg-primary text-primary-foreground'
+            : 'bg-muted text-muted-foreground'
         )}
       >
-        <CardContent className="p-3 text-sm">{content}</CardContent>
-      </Card>
-      {isUser && <ChatAvatar role={role} />}
+        {content}
+      </div>
     </div>
   );
 }
