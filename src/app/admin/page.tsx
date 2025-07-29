@@ -29,7 +29,9 @@ import { Label } from '@/components/ui/label';
 import { Form, FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, DollarSign, Layers, Warehouse } from 'lucide-react';
+import { Package, DollarSign, Layers, Warehouse, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+
 
 import type { User } from '@supabase/supabase-js';
 
@@ -202,10 +204,21 @@ export default function AdminPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Admin Dashboard {isDemo && <span className="text-sm font-normal text-muted-foreground">(Demo)</span>}</h1>
+       <div className="absolute top-4 left-4">
+        <Button asChild variant="ghost">
+          <Link href="/">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Chat
+          </Link>
+        </Button>
+      </div>
+      <div className="flex justify-end items-center mb-6">
         {!isDemo && <Button onClick={handleLogout}>Logout</Button>}
       </div>
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-bold">Admin Dashboard {isDemo && <span className="text-sm font-normal text-muted-foreground">(Demo)</span>}</h1>
+      </div>
+
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
         <Card>
