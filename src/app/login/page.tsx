@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -6,7 +7,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function AuthPage() {
   const [email, setEmail] = useState('');
@@ -56,6 +57,11 @@ export default function AuthPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">{isRegistering ? 'Register' : 'Login'}</CardTitle>
+          <CardDescription>
+            {isRegistering
+              ? 'Create an account to get started.'
+              : 'Enter your credentials to access your account.'}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={isRegistering ? handleSignUp : handleLogin} className="space-y-4">
