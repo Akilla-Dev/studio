@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -43,6 +43,14 @@ type InventoryItem = {
   features: string;
 };
 
+const demoInventory: InventoryItem[] = [
+    { id: 1, name: 'Laptop Pro', brand: 'TechBrand', category: 'Laptops', price_usd: 1200.00, stock: 50, features: '16GB RAM, 512GB SSD' },
+    { id: 2, name: 'Smartphone X', brand: 'ConnectIt', category: 'Smartphones', price_usd: 800.00, stock: 150, features: '6.5" OLED, 128GB' },
+    { id: 3, name: 'Wireless Headphones', brand: 'SoundWave', category: 'Audio', price_usd: 250.00, stock: 300, features: 'Noise Cancelling' },
+    { id: 4, name: '4K Monitor', brand: 'ViewMax', category: 'Monitors', price_usd: 600.00, stock: 75, features: '27-inch, IPS Panel' },
+    { id: 5, name: 'Mechanical Keyboard', brand: 'TypeFast', category: 'Peripherals', price_usd: 150.00, stock: 200, features: 'RGB Backlight, Red Switches' },
+];
+
 const inventorySchema = z.object({
   name: z.string().min(1, 'Name is required'),
   brand: z.string().min(1, 'Brand is required'),
@@ -59,6 +67,8 @@ export default function AdminPage() {
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isDemo = searchParams.get('demo') === 'true';
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof inventorySchema>>({
@@ -80,16 +90,21 @@ export default function AdminPage() {
   }, [inventory]);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data.user) {
-        router.push('/login');
-      } else {
-        setUser(data.user);
-      }
-    };
-    fetchUser();
-  }, [router]);
+    if (isDemo) {
+      setInventory(demoInventory);
+      setLoading(false);
+    } else {
+        const fetchUser = async () => {
+            const { data, error } = await supabase.auth.getUser();
+            if (error || !data.user) {
+              router.push('/login');
+            } else {
+              setUser(data.user);
+            }
+        };
+        fetchUser();
+    }
+  }, [router, isDemo]);
 
   const fetchInventory = async () => {
     setLoading(true);
@@ -115,7 +130,7 @@ export default function AdminPage() {
     if (user) {
       fetchInventory();
     }
-  }, [user, toast]);
+  }, [user]);
 
   useEffect(() => {
     if (editingItem) {
@@ -128,7 +143,7 @@ export default function AdminPage() {
         features: editingItem.features || '',
       });
     } else {
-      form.reset();
+      form.reset({ name: '', brand: '', category: '', price_usd: 0, stock: 0, features: ''});
     }
   }, [editingItem, form]);
 
@@ -148,6 +163,15 @@ export default function AdminPage() {
   }
 
   const onSubmit = async (values: z.infer<typeof inventorySchema>) => {
+    if (isDemo) {
+        toast({ title: 'Demo Mode', description: 'Changes are not saved in demo mode.' });
+        handleDialogClose();
+        // Optionally update state to reflect change in UI
+        if (editingItem) {
+          setInventory(inventory.map(item => item.id === editingItem.id ? {...editingItem, ...values} : item));
+        }
+        return;
+    }
     if (!editingItem) return;
 
     const { error } = await supabase
@@ -172,15 +196,15 @@ export default function AdminPage() {
     }
   };
 
-  if (!user || loading) {
+  if (loading) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <Button onClick={handleLogout}>Logout</Button>
+        <h1 className="text-3xl font-bold">Admin Dashboard {isDemo && <span className="text-sm font-normal text-muted-foreground">(Demo)</span>}</h1>
+        {!isDemo && <Button onClick={handleLogout}>Logout</Button>}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
