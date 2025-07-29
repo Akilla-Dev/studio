@@ -9,9 +9,6 @@ export default {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'tech-gradient': 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--secondary)), hsl(var(--primary)))',
-      },
       fontFamily: {
         body: ['PT Sans', 'sans-serif'],
         headline: ['PT Sans', 'sans-serif'],
@@ -90,18 +87,12 @@ export default {
             '50%': { 'background-position': '100% 50%' },
             '100%': { 'background-position': '0% 50%' },
         },
-        'tech-gradient': {
-          '0%': { 'background-position': '0% 50%' },
-          '50%': { 'background-position': '100% 50%' },
-          '100%': { 'background-position': '0% 50%' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'neon-glow-animated': 'neon-glow-animated 4s linear infinite',
         'background-pan': 'background-pan 15s ease infinite',
-        'tech-gradient': 'tech-gradient 3s linear infinite',
       },
        backgroundSize: {
         '200%': '200%',
