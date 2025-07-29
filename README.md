@@ -1,4 +1,4 @@
-# Firebase Studio
+# Makers Case studio
 
 This is a NextJS starter in Firebase Studio.
 
