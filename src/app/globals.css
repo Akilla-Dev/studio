@@ -36,33 +36,33 @@
   }
 
   .dark {
-    --background: 0 0% 0%; /* Black */
-    --foreground: 177 100% 95%; /* Bright Cyan/Turquoise text */
+    --background: 180 5% 10%; /* Dark Slate */
+    --foreground: 180 10% 90%; /* Light Cyan */
 
-    --card: 204 10% 10%;
-    --card-foreground: 177 100% 95%;
+    --card: 180 5% 15%; /* Darker Slate */
+    --card-foreground: 180 10% 90%; /* Light Cyan */
 
-    --popover: 204 10% 5%;
-    --popover-foreground: 177 100% 95%;
+    --popover: 180 5% 10%; /* Dark Slate */
+    --popover-foreground: 180 10% 90%; /* Light Cyan */
 
-    --primary: 177 100% 50%; /* Bright Cyan/Turquoise */
-    --primary-foreground: 204 10% 5%;
+    --primary: 174 72% 48%; /* Teal */
+    --primary-foreground: 0 0% 100%; /* White */
 
-    --secondary: 174 63% 25%; /* darker teal */
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 174 63% 30%; /* Darker Teal */
+    --secondary-foreground: 180 10% 90%; /* Light Cyan */
 
-    --muted: 174 30% 25%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 180 5% 20%; /* Light Slate */
+    --muted-foreground: 180 5% 60%; /* Lighter Slate */
 
-    --accent: 174 63% 37%; /* teal */
-    --accent-foreground: 0 0% 98%;
+    --accent: 174 72% 58%; /* Brighter Teal */
+    --accent-foreground: 0 0% 100%; /* White */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%; /* Red */
+    --destructive-foreground: 0 0% 100%; /* White */
 
-    --border: 174 50% 30%;
-    --input: 174 50% 30%;
-    --ring: 177 100% 50%;
+    --border: 180 5% 25%; /* Lighter Slate Border */
+    --input: 180 5% 25%; /* Lighter Slate Input */
+    --ring: 174 72% 48%; /* Teal Ring */
   }
 }
 
