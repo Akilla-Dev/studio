@@ -21,7 +21,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog';
@@ -116,7 +115,7 @@ export default function AdminPage() {
     if (user) {
       fetchInventory();
     }
-  }, [user]);
+  }, [user, toast]);
 
   useEffect(() => {
     if (editingItem) {
@@ -128,6 +127,8 @@ export default function AdminPage() {
         stock: editingItem.stock,
         features: editingItem.features || '',
       });
+    } else {
+      form.reset();
     }
   }, [editingItem, form]);
 
@@ -140,6 +141,11 @@ export default function AdminPage() {
     setEditingItem(item);
     setIsDialogOpen(true);
   };
+  
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setEditingItem(null);
+  }
 
   const onSubmit = async (values: z.infer<typeof inventorySchema>) => {
     if (!editingItem) return;
@@ -161,8 +167,7 @@ export default function AdminPage() {
         title: 'Success',
         description: 'Item updated successfully.',
       });
-      setIsDialogOpen(false);
-      setEditingItem(null);
+      handleDialogClose();
       fetchInventory(); // Re-fetch inventory to show updated data
     }
   };
@@ -218,38 +223,38 @@ export default function AdminPage() {
       </div>
 
       <h2 className="text-2xl font-bold mb-4">Inventory Management</h2>
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Brand</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead className="text-right">Price (USD)</TableHead>
-                <TableHead className="text-right">Stock</TableHead>
-                <TableHead className="text-center">Actions</TableHead>
+      <Card>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Brand</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead className="text-right">Price (USD)</TableHead>
+              <TableHead className="text-right">Stock</TableHead>
+              <TableHead className="text-center">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {inventory.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell className="font-medium">{item.name}</TableCell>
+                <TableCell>{item.brand}</TableCell>
+                <TableCell>{item.category}</TableCell>
+                <TableCell className="text-right">${item.price_usd.toFixed(2)}</TableCell>
+                <TableCell className="text-right">{item.stock}</TableCell>
+                <TableCell className="text-center">
+                  <Button variant="outline" size="sm" onClick={() => handleEditClick(item)}>
+                    Edit
+                  </Button>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {inventory.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.name}</TableCell>
-                  <TableCell>{item.brand}</TableCell>
-                  <TableCell>{item.category}</TableCell>
-                  <TableCell className="text-right">${item.price_usd.toFixed(2)}</TableCell>
-                  <TableCell className="text-right">{item.stock}</TableCell>
-                  <TableCell className="text-center">
-                    <Button variant="outline" size="sm" onClick={() => handleEditClick(item)}>
-                      Edit
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
-        
+            ))}
+          </TableBody>
+        </Table>
+      </Card>
+      
+      <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
         {editingItem && (
           <DialogContent>
             <DialogHeader>
@@ -336,9 +341,7 @@ export default function AdminPage() {
                   )}
                 />
                 <DialogFooter>
-                  <DialogClose asChild>
-                    <Button type="button" variant="secondary">Cancel</Button>
-                  </DialogClose>
+                  <Button type="button" variant="secondary" onClick={handleDialogClose}>Cancel</Button>
                   <Button type="submit">Save Changes</Button>
                 </DialogFooter>
               </form>
@@ -349,5 +352,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-    
