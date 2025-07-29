@@ -47,6 +47,7 @@ export default function AuthPage() {
       setError(error.message);
     } else {
       setMessage('Please check your email to confirm your account!');
+      setIsRegistering(false); // Switch back to login view after successful sign up
     }
   };
 
@@ -86,13 +87,15 @@ export default function AuthPage() {
           </form>
           <div className="mt-4 text-center text-sm">
             {isRegistering ? (
-              <>Already have an account?{' '}
+              <>
+                Already have an account?{' '}
                 <Button variant="link" onClick={() => setIsRegistering(false)} className="p-0 h-auto align-baseline">
                   Login
                 </Button>
               </>
             ) : (
-              <>Don't have an account?{' '}
+              <>
+                Don't have an account?{' '}
                 <Button variant="link" onClick={() => setIsRegistering(true)} className="p-0 h-auto align-baseline">
                   Sign Up
                 </Button>
@@ -103,3 +106,4 @@ export default function AuthPage() {
       </Card>
     </div>
   );
+}
