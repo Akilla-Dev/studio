@@ -81,13 +81,22 @@ export default {
         'neon-glow-animated': {
             '0%, 100%': { 'box-shadow': '0 0 5px hsl(180, 100%, 50%), 0 0 10px hsl(180, 100%, 50%)' },
             '50%': { 'box-shadow': '0 0 5px hsl(120, 100%, 50%), 0 0 10px hsl(120, 100%, 50%)' },
+        },
+        'background-pan': {
+            '0%': { 'background-position': '0% 50%' },
+            '50%': { 'background-position': '100% 50%' },
+            '100%': { 'background-position': '0% 50%' },
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'neon-glow-animated': 'neon-glow-animated 4s linear infinite',
+        'background-pan': 'background-pan 15s ease infinite',
       },
+       backgroundSize: {
+        '200%': '200%',
+      }
     },
   },
   plugins: [require('tailwindcss-animate')],
