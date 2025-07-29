@@ -79,8 +79,8 @@ export default {
           },
         },
         'neon-glow-animated': {
-            '0%, 100%': { 'box-shadow': '0 0 5px hsl(180, 100%, 50%), 0 0 10px hsl(180, 100%, 50%)' },
-            '50%': { 'box-shadow': '0 0 5px hsl(120, 100%, 50%), 0 0 10px hsl(120, 100%, 50%)' },
+            '0%, 100%': { 'box-shadow': '0 0 2px hsl(var(--primary)), 0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary))' },
+            '50%': { 'box-shadow': '0 0 5px hsl(var(--accent)), 0 0 10px hsl(var(--accent)), 0 0 20px hsl(var(--accent))' },
         },
         'background-pan': {
             '0%': { 'background-position': '0% 50%' },
