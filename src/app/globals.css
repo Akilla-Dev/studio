@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 204 10% 10%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 204 10% 10%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 204 10% 10%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
 
     --primary: 177 36% 64%;
     --primary-foreground: 204 10% 10%;
@@ -19,42 +19,20 @@
     --secondary: 174 63% 25%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 0 0% 90%;
-    --accent-foreground: 204 10% 10%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 177 36% 64%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
+
     --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 20% 98%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
+
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 216 12.2% 83.9%;
+
+    --radius: 0.5rem;
   }
 }
 
@@ -74,4 +52,30 @@
   .neon-text-gradient {
     @apply text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-foreground/80;
   }
+  .particle-background {
+    @apply absolute inset-0 w-full h-full overflow-hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: hsl(var(--primary));
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: particles-float 25s linear infinite;
+  }
+
+}
+
+@layer utilities {
+    @keyframes particles-float {
+        0% {
+            transform: translateY(0) translateX(0);
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateY(-100vh) translateX(var(--particle-x-end));
+            opacity: 0;
+        }
+    }
 }
