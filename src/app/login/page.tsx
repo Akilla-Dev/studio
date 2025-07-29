@@ -60,44 +60,8 @@ export default function AuthPage() {
     setIsLoading(false);
   };
   
-  const handleQuickAccess = async () => {
-    setError(null);
-    setMessage(null);
-    setIsLoading(true);
-
-    // Using a demo account for quick access
-    const { error } = await supabase.auth.signInWithPassword({
-      email: 'demo@example.com',
-      password: 'password', // Use a secure, known password for the demo account
-    });
-
-    if (error) {
-       // If the demo user doesn't exist, create it.
-      if (error.message.includes('Invalid login credentials')) {
-        const { error: signUpError } = await supabase.auth.signUp({
-          email: 'demo@example.com',
-          password: 'password',
-        });
-        if (signUpError) {
-          setError(`Could not create demo user: ${signUpError.message}`);
-        } else {
-           const { error: signInAgainError } = await supabase.auth.signInWithPassword({
-              email: 'demo@example.com',
-              password: 'password',
-           });
-            if (signInAgainError) {
-               setError(`Demo user created, but login failed: ${signInAgainError.message}`);
-            } else {
-               router.push('/admin');
-            }
-        }
-      } else {
-        setError(error.message);
-      }
-    } else {
-      router.push('/admin');
-    }
-    setIsLoading(false);
+  const handleQuickAccess = () => {
+    router.push('/admin?demo=true');
   };
 
 

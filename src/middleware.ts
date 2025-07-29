@@ -57,7 +57,13 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
+  const isDemo = searchParams.get('demo') === 'true'
+
+  // Allow demo access to admin page without login
+  if (pathname.startsWith('/admin') && isDemo) {
+    return response
+  }
 
   // if user is not signed in and the current path is not /login, redirect the user to /login
   if (!user && pathname.startsWith('/admin')) {
