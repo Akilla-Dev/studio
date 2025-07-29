@@ -6,8 +6,7 @@ import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { SendHorizontal, Wand2 } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { SendHorizontal } from 'lucide-react';
 
 const formSchema = z.object({
   message: z.string().min(1, { message: 'Message cannot be empty.' }),
@@ -19,7 +18,7 @@ interface ChatInputProps {
   isLoading: boolean;
 }
 
-export default function ChatInput({ onSendMessage, onSmartTool, isLoading }: ChatInputProps) {
+export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,7 +50,7 @@ export default function ChatInput({ onSendMessage, onSmartTool, isLoading }: Cha
               <FormControl>
                 <Textarea
                   placeholder="Ask the agent anything..."
-                  className="pr-24 min-h-[52px] resize-none"
+                  className="pr-16 min-h-[52px] resize-none neon-glow"
                   {...field}
                   onKeyDown={handleKeyDown}
                 />
@@ -59,22 +58,8 @@ export default function ChatInput({ onSendMessage, onSmartTool, isLoading }: Cha
             </FormItem>
           )}
         />
-        <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center gap-2">
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button type="button" variant="ghost" size="icon" onClick={onSmartTool} disabled={isLoading}>
-                            <Wand2 className="h-5 w-5" />
-                            <span className="sr-only">Smart Tool Invocation</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Invoke Smart Tool (AI decides)</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-
-            <Button type="submit" size="icon" disabled={isLoading}>
+        <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center">
+            <Button type="submit" size="icon" disabled={isLoading} className="neon-glow">
                 <SendHorizontal className="h-5 w-5" />
                 <span className="sr-only">Send Message</span>
             </Button>

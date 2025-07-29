@@ -25,16 +25,16 @@ export default function ChatMessages({ messages, isLoading }: ChatMessagesProps)
     <div className="flex-1 space-y-4">
       {messages.length === 0 && !isLoading && (
         <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-            <Bot className="h-16 w-16 mb-4 text-primary/50" />
-            <h2 className="text-2xl font-headline font-semibold">Welcome to AgentAI Chat</h2>
-            <p className="mt-2">Ask me anything! I'm connected to an n8n agent.</p>
+            <Bot className="h-12 w-12 mb-2 text-primary/50 neon-glow" />
+            <h2 className="text-xl font-headline font-semibold neon-text-gradient">AgentAI</h2>
+            <p className="text-sm neon-text-gradient">Ask me anything!</p>
         </div>
       )}
       {messages.map((message) => (
         <ChatMessage key={message.id} message={message} />
       ))}
       {isLoading && (
-        <ChatMessage message={{id: 'loading', role: 'assistant', content: '... thinking'}} />
+        <ChatMessage message={{id: 'loading', role: 'assistant', content: '...'}} />
       )}
       <div ref={messagesEndRef} />
     </div>

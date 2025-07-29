@@ -5,7 +5,7 @@ import type { Message } from '@/lib/types';
 import type { SmartToolInvocationOutput } from '@/ai/flows/smart-tool-invocation';
 
 
-const WEBHOOK_URL = 'https://n8n-agentai-pqrsandmore-u43659.vm.elestio.app/webhook/input';
+const WEBHOOK_URL = 'https://n8n-agentai-pqrsandmore-u43659.vm.elestio.app/webhook-test/input';
 
 interface N8NResponse {
   reply?: string;
@@ -18,6 +18,8 @@ export async function sendMessageToWebhook(prompt: string): Promise<string> {
     return "I can't send an empty message.";
   }
 
+  console.log(`Sending prompt to webhook: "${prompt}"`);
+
   try {
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
@@ -27,51 +29,46 @@ export async function sendMessageToWebhook(prompt: string): Promise<string> {
       body: JSON.stringify({ message: prompt }),
     });
 
+    const responseBody = await response.text();
+    console.log('Webhook response status:', response.status);
+    console.log('Webhook response body:', responseBody);
+
     if (!response.ok) {
-      const errorBody = await response.text();
-      console.error(`Webhook responded with status ${response.status}: ${errorBody}`);
-      return `Sorry, the agent returned an error (status ${response.status}).`;
+      console.error(`Webhook responded with status ${response.status}: ${responseBody}`);
+      return `Sorry, the agent returned an error (status ${response.status}). Check the server logs for details.`;
     }
 
-    const data: N8NResponse | N8NResponse[] = await response.json();
-    
-    let replyText = '';
-
-    if (Array.isArray(data) && data.length > 0) {
-      const firstItem = data[0];
-      replyText = firstItem.reply || firstItem.text || firstItem.response || JSON.stringify(firstItem);
-    } else if (!Array.isArray(data)) {
-      replyText = data.reply || data.text || data.response || JSON.stringify(data);
+    try {
+      const jsonResponse: N8NResponse = JSON.parse(responseBody);
+      const reply = jsonResponse.reply || jsonResponse.text || jsonResponse.response;
+      if (reply) {
+        console.log('Extracted reply from JSON:', reply);
+        return reply;
+      } else {
+        console.warn('JSON response did not contain a recognized reply field (reply, text, or response).');
+        return responseBody;
+      }
+    } catch (e) {
+      console.log('Response was not JSON, returning raw text.');
+      return responseBody;
     }
-
-    if (!replyText || replyText === '{}' || replyText === '[]') {
-      return "I received an empty or invalid response from the agent.";
-    }
-
-    return replyText;
   } catch (error) {
-    console.error('Error calling webhook:', error);
-    return 'Sorry, I encountered an error trying to connect to the agent.';
+    console.error('Failed to send message to webhook:', error);
+    return 'Sorry, there was an issue connecting to the agent.';
   }
 }
 
-export async function invokeSmartToolAction(chatHistory: Message[]): Promise<SmartToolInvocationOutput> {
-  const formattedHistory = chatHistory
-    .map((msg) => `${msg.role}: ${typeof msg.content === 'string' ? msg.content : '[Object Message]'}`)
-    .join('\n');
-
-  const availableTools = ['get_weather', 'search_knowledge_base', 'create_ticket'];
-
-  try {
-    const result = await smartToolInvocation({
-      chatHistory: formattedHistory,
-      availableTools,
-    });
-    return result;
-  } catch (error) {
-    console.error('Error invoking smart tool:', error);
-    return {
-      reasoning: 'An error occurred while trying to invoke the smart tool.',
-    };
-  }
+/*
+* This function is temporarily commented out to resolve a build issue.
+* We will fix and re-enable it after confirming the webhook functionality.
+export async function invokeSmartToolAction(
+  messages: Message[]
+): Promise<SmartToolInvocationOutput> {
+  const result = await smartToolInvocation({
+    chatHistory: messages.map((m) => `${m.role}: ${m.content}`).join('
+'),
+    availableTools: ['sendEmail', 'searchWeb'], // ToDo: Make this dynamic
+  });
+  return result;
 }
+*/

@@ -78,10 +78,15 @@ export default {
             height: '0',
           },
         },
+        'neon-glow-animated': {
+            '0%, 100%': { 'box-shadow': '0 0 5px hsl(180, 100%, 50%), 0 0 10px hsl(180, 100%, 50%)' },
+            '50%': { 'box-shadow': '0 0 5px hsl(120, 100%, 50%), 0 0 10px hsl(120, 100%, 50%)' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'neon-glow-animated': 'neon-glow-animated 4s linear infinite',
       },
     },
   },
