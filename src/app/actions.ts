@@ -11,6 +11,7 @@ interface N8NResponse {
   reply?: string;
   text?: string;
   response?: string;
+  output?: string;
 }
 
 export async function sendMessageToWebhook(prompt: string): Promise<string> {
@@ -40,12 +41,12 @@ export async function sendMessageToWebhook(prompt: string): Promise<string> {
 
     try {
       const jsonResponse: N8NResponse = JSON.parse(responseBody);
-      const reply = jsonResponse.reply || jsonResponse.text || jsonResponse.response;
+      const reply = jsonResponse.output || jsonResponse.reply || jsonResponse.text || jsonResponse.response;
       if (reply) {
         console.log('Extracted reply from JSON:', reply);
         return reply;
       } else {
-        console.warn('JSON response did not contain a recognized reply field (reply, text, or response).');
+        console.warn('JSON response did not contain a recognized reply field (output, reply, text, or response).');
         return responseBody;
       }
     } catch (e) {
