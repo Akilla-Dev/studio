@@ -7,8 +7,9 @@ import ChatMessages from '@/components/chat/chat-messages';
 import ChatInput from '@/components/chat/chat-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Trash2 } from 'lucide-react';
+import { Trash2, User } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import Link from 'next/link';
 
 
 const Particle = ({ style }: { style: React.CSSProperties }) => {
@@ -71,6 +72,14 @@ export default function Home() {
   return (
     <div className="relative flex h-screen w-full flex-col bg-gradient-to-br from-primary/10 via-secondary/20 to-background bg-200%">
         <div className="particle-background">{particles}</div>
+        <header className="absolute top-0 right-0 p-4 z-20">
+          <Link href="/login" passHref>
+            <Button variant="ghost">
+                <User className="h-5 w-5 mr-2" />
+                Admin
+            </Button>
+          </Link>
+        </header>
       <main className="flex-1 overflow-y-auto p-4 md:p-6 z-10">
         <div className="max-w-3xl mx-auto">
             {messages.length > 0 && (
