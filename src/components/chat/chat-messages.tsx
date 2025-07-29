@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { Message } from '@/lib/types';
@@ -25,7 +26,7 @@ export default function ChatMessages({ messages, isLoading }: ChatMessagesProps)
     <div className="flex-1 space-y-4">
       {messages.length === 0 && !isLoading && (
         <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-            <Bot className="h-12 w-12 mb-2 text-primary/50 neon-glow" />
+            <Bot className="h-12 w-12 mb-2 text-primary/50" />
             <h2 className="text-xl font-headline font-semibold neon-text-gradient">Makers tech</h2>
             <p className="text-sm neon-text-gradient">Ask me anything!</p>
         </div>
